@@ -3,10 +3,10 @@ from fastapi import FastAPI, HTTPException, Depends, Request,status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from hashing import Hash
-from jwttoken import create_access_token
-from oauth import get_current_user
+from jwttoken import create_access_token, get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
+import model
 
 app = FastAPI()
 origins = [
@@ -41,8 +41,8 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 @app.get("/")
-def read_root(current_user:User = Depends(get_current_user)):
-	return {"data":"Hello OWrld"}
+def read_root(current_user:model.User = Depends(get_current_user)):
+	return {"data":"Ini udh terautentikasi"}
 
 @app.post('/register')
 def create_user(request:User):
