@@ -1,2 +1,4 @@
 tstvenv
 __pycache__
+.vscode
+.env

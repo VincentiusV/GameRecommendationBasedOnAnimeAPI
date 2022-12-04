@@ -18,8 +18,8 @@ class game_schema(BaseModel):
     tahun_pembuatan : str = Field(...)
     genre : str = Field(...)
     developer : str = Field(...)
-class update_game(BaseModel):
-    judul_game : str
+class update_game_schema(BaseModel):
+    judul_game : Optional[str]
     tahun_pembuatan : Optional[str]
     genre : Optional[str]
     developer : Optional[str]
