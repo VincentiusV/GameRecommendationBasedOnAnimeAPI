@@ -11,7 +11,7 @@ from routes.gameRoutes import game_router
 # from typing import Optional
 from database.database import user_db
 
-app = FastAPI()
+app = FastAPI(title="Game API")
 
 @app.get("/", tags=["Root"])
 async def welcome_text():

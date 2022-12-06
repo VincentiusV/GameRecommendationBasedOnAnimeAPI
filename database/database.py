@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from models.model import game_schema
 from bson.objectid import ObjectId
+import re
 
 mongodb_uri = 'mongodb+srv://admin:admin@clustertst.92xxsyc.mongodb.net/?retryWrites=true&w=majority'
 port = 8000
@@ -19,11 +20,11 @@ def game_parser(game) -> dict:
         "judul_game": game["judul_game"],
         "tahun_pembuatan": game["tahun_pembuatan"],
         "genre": game["genre"],
-        "developer": game["developer"],
+        "developer": game["developer"]
     }
 
-# def games_serializer(games) -> dict:
-#     return [game_parser(game) for game in games]
+def games_serializer(games) -> list:
+    return [game_parser(game) for game in games]
 
 # Retrieve all games
 def get_all_games():
@@ -34,7 +35,8 @@ def get_all_games():
 
 # Retrieve a game by name
 # def get_game_by_name(judul_game: str) -> dict:
-#     game = games_serializer(games_test.find({"judul_game": judul_game}))
+#     game_by_name = {"judul_game": {'$regex': judul_game.capitalize()}}
+#     game = games_serializer(games_col.find(game_by_name))
 #     if game:
 #         return game_parser(game)
 
