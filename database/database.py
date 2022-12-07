@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from models.model import game_schema
 from bson.objectid import ObjectId
 import re
+import json
 
 mongodb_uri = 'mongodb+srv://admin:admin@clustertst.92xxsyc.mongodb.net/?retryWrites=true&w=majority'
 port = 8000
@@ -13,6 +14,9 @@ game_db = client["Game"]
 games_col = game_db["games"]
 games_test = game_db['gametest']
 
+anime_db = client["Anime"]
+anime_col = anime_db["anime"]
+
 # Parser from Mongo to Python
 def game_parser(game) -> dict:
     return {
@@ -23,28 +27,41 @@ def game_parser(game) -> dict:
         "developer": game["developer"]
     }
 
+def anime_parser(anime) -> dict:
+    return {
+        "id": str(anime["_id"]),
+        "judul_anime": anime["judul_anime"],
+        "genre_anime": anime["genre_anime"]
+    }
+
 def games_serializer(games) -> list:
     return [game_parser(game) for game in games]
+
+def anime_serializer(animes) -> list:
+    return [anime_parser(anime) for anime in animes]
 
 # Retrieve all games
 def get_all_games():
     games = []
     for game in games_col.find():
         games.append(game_parser(game))
-    return games
-
-# Retrieve a game by name
-# def get_game_by_name(judul_game: str) -> dict:
-#     game_by_name = {"judul_game": {'$regex': judul_game.capitalize()}}
-#     game = games_serializer(games_col.find(game_by_name))
-#     if game:
-#         return game_parser(game)
+    return {"Total Games" : len(games)}, games
 
 # Retrieve a game by id
 async def get_game_by_id(id: str) -> dict:
     game = games_col.find_one({"_id": ObjectId(id)})
     if game:
         return game_parser(game)
+
+# Retrieve a game by judul
+def get_game_by_judul(judul_game: str):
+    game_by_judul = {"judul_game": {"$regex": judul_game.capitalize()}}
+    return games_serializer(games_col.find(game_by_judul))
+
+# Retrieve games by genre
+def get_game_by_genre(genre: str):
+    game_by_genre = {"genre": {"$regex": genre.capitalize()}}
+    return games_serializer(games_col.find(game_by_genre))
 
 # Add Game
 async def add_game(game: dict) -> dict:
@@ -74,3 +91,11 @@ async def delete_game(id: str):
     if game:
         games_col.delete_one({"_id": ObjectId(id)})
         return True
+
+# Get Anime Genre
+def get_anime_genre(judul_anime:str):
+    anime = {"judul_anime": {"$regex": judul_anime.capitalize()}}
+    anime_data = anime_serializer(anime_col.find(anime))
+    anime_data_extracted = json.loads(anime_data)
+    return (anime_data_extracted['genre_anime'])
+    

@@ -1,14 +1,10 @@
-from fastapi import FastAPI, HTTPException, Depends, Request,status
-# from fastapi.responses import JSONResponse
-# from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Depends, status
 from models.hashing import Hash
-from models.jwttoken import create_access_token, get_current_user
+from models.jwttoken import create_access_token
 from fastapi.security import OAuth2PasswordRequestForm
-# from fastapi.middleware.cors import CORSMiddleware
-import models.model as model
 from models.model import User
 from routes.gameRoutes import game_router
-# from typing import Optional
+from routes.ganimeRoutes import ganime_router
 from database.database import user_db
 
 app = FastAPI(title="Game API")
@@ -17,18 +13,6 @@ app = FastAPI(title="Game API")
 async def welcome_text():
 	return {"Selamat datang di Game API, silakan login untuk dapat mengakses API ini"}
 
-# origins = [
-#     "http://localhost:3000",
-#     "http://localhost:8080",
-# ]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
 
 @app.post('/register', tags=["User"])
 def create_user(request:User):
@@ -54,6 +38,7 @@ def login(request:OAuth2PasswordRequestForm = Depends()):
 # 	return {"data":"Ini udh terautentikasi"}
 
 app.include_router(game_router, tags=['Games'], prefix='/games')
+app.include_router(ganime_router, tags=['Game Recommendation Based on Anime'], prefix='/game-anime-recommendation')
 
 import uvicorn
 
