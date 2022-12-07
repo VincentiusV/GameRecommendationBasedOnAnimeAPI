@@ -3,7 +3,8 @@ from models.jwttoken import create_access_token, get_current_user
 from fastapi import APIRouter, Body, HTTPException, Depends, Request,status
 # from models.hashing import Hash
 from models.model import (User, Login, Token, TokenData,game_schema, update_game_schema)
-from database.database import get_game_by_genre, get_game_by_judul, user_db,get_all_games, get_game_by_id, add_game, update_game, delete_game, game_parser, games_serializer, games_col, games_test
+# from database.database import get_game_by_genre, get_game_by_judul, user_db,get_all_games, get_game_by_id, add_game, update_game, delete_game, game_parser, games_serializer, games_col, games_test
+from database.database import *
 import sys
 from fastapi.encoders import jsonable_encoder
 
@@ -60,7 +61,7 @@ async def update_game_data(id: str, game: update_game_schema = Body(...), curren
     updated_game = await update_game(id, game)
     if updated_game :
         return (updated_game)
-    return ("There was an error updating the drama")
+    return ("There was an error updating the game")
 
 # Delete
 @game_router.delete('/delete/{id}')

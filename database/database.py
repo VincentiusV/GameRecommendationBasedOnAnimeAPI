@@ -55,8 +55,16 @@ async def get_game_by_id(id: str) -> dict:
 
 # Retrieve a game by judul
 def get_game_by_judul(judul_game: str):
-    game_by_judul = {"judul_game": {"$regex": judul_game.capitalize()}}
+    game_by_judul = {"judul_game": {"$regex": judul_game.title()}}
     return games_serializer(games_col.find(game_by_judul))
+
+# def get_game_by_judul(game_name: str):
+#     games = []
+#     search = game_name.title().split()
+#     for game in games_col.find():
+#         if all(x in game['judul_game'] for x in search):
+#             games.append(game_parser(game))
+#     return games
 
 # Retrieve games by genre
 def get_game_by_genre(genre: str):
@@ -98,5 +106,10 @@ def get_anime_genre(judul_anime:str):
     anime_data = (anime_col.find_one(anime))
     # anime_data_extracted = json.loads(anime_data)
     return (anime_data['genre_anime'])
+
+# Get One Random Game
+def get_one_game_by_genre(genre: str):
+    game_by_genre = {"genre": {"$regex": genre.capitalize()}}
+    return (games_col.find_one(game_by_genre, {'_id': 0}))
 
 

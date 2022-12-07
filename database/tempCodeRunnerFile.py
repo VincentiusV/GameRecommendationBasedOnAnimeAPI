@@ -1,1 +1,2 @@
-print (get_anime_genre('naruto'))
+
+list_of_entry = list(games_test.items())
