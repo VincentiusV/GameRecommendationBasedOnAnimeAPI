@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from models.model import game_schema
+# from models.model import game_schema
 from bson.objectid import ObjectId
 import re
 import json
@@ -95,7 +95,8 @@ async def delete_game(id: str):
 # Get Anime Genre
 def get_anime_genre(judul_anime:str):
     anime = {"judul_anime": {"$regex": judul_anime.capitalize()}}
-    anime_data = anime_serializer(anime_col.find(anime))
-    anime_data_extracted = json.loads(anime_data)
-    return (anime_data_extracted['genre_anime'])
-    
+    anime_data = (anime_col.find_one(anime))
+    # anime_data_extracted = json.loads(anime_data)
+    return (anime_data['genre_anime'])
+
+
