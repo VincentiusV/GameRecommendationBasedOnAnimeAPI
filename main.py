@@ -9,7 +9,7 @@ from routes.gameSpecsRoutes import gamespecs_router
 from database.database import user_db
 import uvicorn
 
-app = FastAPI(title="Game API")
+app = FastAPI(title="Game API", description="Dalam API ini, Anda dapat melihat berbagai jenis game serta mendapat rekomendasi game berdasarkan Anime favorit Anda")
 
 @app.get("/", tags=["Root"])
 async def welcome_text():
