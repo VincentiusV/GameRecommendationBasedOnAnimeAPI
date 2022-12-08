@@ -5,7 +5,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from models.model import User
 from routes.gameRoutes import game_router
 from routes.ganimeRoutes import ganime_router
+from routes.gameSpecsRoutes import gamespecs_router
 from database.database import user_db
+import uvicorn
 
 app = FastAPI(title="Game API")
 
@@ -33,14 +35,9 @@ def login(request:OAuth2PasswordRequestForm = Depends()):
 	access_token = create_access_token(data={"sub": user["username"] })
 	return {"access_token": access_token, "token_type": "bearer"}
 
-# @app.get("/tes")
-# def read_root(current_user:model.User = Depends(get_current_user)):
-# 	return {"data":"Ini udh terautentikasi"}
-
 app.include_router(game_router, tags=['Games'], prefix='/games')
 app.include_router(ganime_router, tags=['Game Recommendation Based on Anime'], prefix='/game-anime-recommendation')
-
-import uvicorn
+app.include_router(gamespecs_router, tags=['Games Spec and PC Part Recommendation'], prefix='/game-specs')
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from tqdm import tqdm
-import string
 
 url = "https://myanimelist.net/anime/genre/"
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}

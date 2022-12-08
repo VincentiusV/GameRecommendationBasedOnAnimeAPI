@@ -1,8 +1,6 @@
 from pymongo import MongoClient
-# from models.model import game_schema
 from bson.objectid import ObjectId
-import re
-import json
+from random import *
 
 mongodb_uri = 'mongodb+srv://admin:admin@clustertst.92xxsyc.mongodb.net/?retryWrites=true&w=majority'
 port = 8000
@@ -58,17 +56,9 @@ def get_game_by_judul(judul_game: str):
     game_by_judul = {"judul_game": {"$regex": judul_game.title()}}
     return games_serializer(games_col.find(game_by_judul))
 
-# def get_game_by_judul(game_name: str):
-#     games = []
-#     search = game_name.title().split()
-#     for game in games_col.find():
-#         if all(x in game['judul_game'] for x in search):
-#             games.append(game_parser(game))
-#     return games
-
 # Retrieve games by genre
 def get_game_by_genre(genre: str):
-    game_by_genre = {"genre": {"$regex": genre.capitalize()}}
+    game_by_genre = {"genre": {"$regex": genre.title()}}
     return games_serializer(games_col.find(game_by_genre))
 
 # Add Game
@@ -102,14 +92,65 @@ async def delete_game(id: str):
 
 # Get Anime Genre
 def get_anime_genre(judul_anime:str):
-    anime = {"judul_anime": {"$regex": judul_anime.capitalize()}}
+    anime = {"judul_anime": {"$regex": judul_anime.title()}}
     anime_data = (anime_col.find_one(anime))
     # anime_data_extracted = json.loads(anime_data)
     return (anime_data['genre_anime'])
 
-# Get One Random Game
-def get_one_game_by_genre(genre: str):
-    game_by_genre = {"genre": {"$regex": genre.capitalize()}}
-    return (games_col.find_one(game_by_genre, {'_id': 0}))
+# Get Three Random Game based on Genre
+def get_three_game_by_genre(genre: str):
+    genre1 = genre_serializer(genre)
+    temp = get_game_by_genre(genre1)
+    list_random_game = []
+    jumlah_game = len(temp)
+    for _ in range(3):
+        value = randint(0, jumlah_game)
+        list_random_game.append(temp[value])
+    return list_random_game
 
-
+# Genre Serializer
+def genre_serializer(genre: str):
+    if genre == "Action" :
+        genre_game = "Action"
+    elif genre == "Comedy":
+        genre_game = "Party"
+    elif genre == "Horror":
+        genre_game = "Survival Horror"
+    elif genre == "Sports":
+        genre_game = "Sports"
+    elif genre == "Adventure":
+        genre_game = "Adventure"
+    elif genre == "Drama":
+        genre_game = "Role-Playing Game"
+    elif genre == "Mystery":
+        genre_game = "Hidden Object"
+    elif genre == "Supernatural":
+        genre_game = "Survival Horror"
+    elif genre == "Avant Garde":
+        genre_game = "Simulation"
+    elif genre == "Fantasy":
+        genre_game = "Simulation"
+    elif genre == "Romance":
+        genre_game = "Life Simulation"
+    elif genre == "Suspense":
+        genre_game = "Casual"
+    elif genre == "Award Winning":
+        genre_game = "Party"
+    elif genre == "Girls Love":
+        genre_game = "Life Simulation"
+    elif genre == "Sci-Fi":
+        genre_game = "Adventure"
+    elif genre == "Boys Love":
+        genre_game = "Life Simulation"
+    elif genre == "Gourmet":
+        genre_game = "Roguelike"
+    elif genre == "Slice of Life":
+        genre_game = "Life Simulation"
+    elif genre == "Ecchi":
+        genre_game = "Life Simulation"
+    elif genre == "Erotica":
+        genre_game = "Life Simulation"
+    elif genre == "Hentai":
+        genre_game = "Life Simulation"
+        
+    return genre_game
